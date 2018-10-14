@@ -1,7 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import ContactList from '../../components/ContactList';
-let contacts = [];
+import styled from 'styled-components';
+import ContactsSidebar from '../../components/ContactsSidebar';
+import ActiveContact from '../ActiveContact';
+
 
 function preparedFetch(opts, sessionToken) {
   const reqOpts = {
@@ -45,6 +47,9 @@ function preparedFetch(opts, sessionToken) {
   });
 }
 
+const Wrapper = styled.div`
+  display: flex;
+`;
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
@@ -52,7 +57,12 @@ export default class HomePage extends React.PureComponent {
     super(props);
     this.state = {
       contacts: [],
-    }
+      activeContact: {},
+    };
+  }
+
+  componentDidMount() {
+    this.userRequest();
   }
 
   userRequest() {
@@ -64,16 +74,27 @@ export default class HomePage extends React.PureComponent {
           return response;
         }
       })
-      .then(data => data.json().then(data => (this.setState({contacts: data}))));
+      .then(data =>
+        data.json().then(data => this.setState({ contacts: data })),
+      );
   }
 
+  setActiveContact = activeContact => {
+    this.setState({
+      activeContact,
+    });
+  };
+
   render() {
+    const { contacts, activeContact } = this.state;
     return (
-      <div>
-        <button onClick={() => this.userRequest()}>click</button>
-        <button onClick={() => console.log(contacts)}>showusers</button>
-        <ContactList contacts={this.state.contacts} />
-      </div>
+      <Wrapper>
+        <ContactsSidebar
+          contacts={contacts}
+          setActiveContact={this.setActiveContact}
+        />
+        <ActiveContact activeContact={activeContact} />
+      </Wrapper>
     );
   }
 }
