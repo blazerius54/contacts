@@ -1,19 +1,8 @@
-/*
- * HomePage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- */
-
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
 
-let users = [];
+let contacts = [];
 
 function preparedFetch(opts, sessionToken) {
   const reqOpts = {
@@ -66,7 +55,7 @@ function userRequest() {
         return response;
       }
     })
-    .then(data => data.json().then(data => (users = data)));
+    .then(data => data.json().then(data => (contacts = data)));
 }
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.PureComponent {
@@ -77,7 +66,7 @@ export default class HomePage extends React.PureComponent {
           <FormattedMessage {...messages.header} />
         </h1>
         <button onClick={() => userRequest()}>click</button>
-        <button onClick={() => console.log(users)}>showusers</button>
+        <button onClick={() => console.log(contacts)}>showusers</button>
       </div>
     );
   }
