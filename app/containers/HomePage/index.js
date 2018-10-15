@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
 
-
 function preparedFetch(opts, sessionToken) {
   const reqOpts = {
     method: opts.method,
@@ -49,6 +48,11 @@ function preparedFetch(opts, sessionToken) {
 
 const Wrapper = styled.div`
   display: flex;
+
+  input {
+    height: 20px;
+    border-bottom: 1px solid black;
+  }
 `;
 
 /* eslint-disable react/prefer-stateless-function */
@@ -58,6 +62,7 @@ export default class HomePage extends React.PureComponent {
     this.state = {
       contacts: [],
       activeContact: {},
+      serchedName: '',
     };
   }
 
@@ -89,8 +94,23 @@ export default class HomePage extends React.PureComponent {
     const { contacts, activeContact } = this.state;
     return (
       <Wrapper>
+        <input
+          onChange={e =>
+            this.setState({
+              serchedName: e.target.value,
+            })
+          }
+        />
         <ContactsSidebar
-          contacts={contacts}
+          contacts={contacts.filter(contact => {
+            if (
+              contact.name
+                .toLowerCase()
+                .indexOf(this.state.serchedName.toLowerCase()) !== -1
+            ) {
+              return contact;
+            }
+          })}
           setActiveContact={this.setActiveContact}
         />
         <ActiveContact activeContact={activeContact} />
