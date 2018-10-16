@@ -48,11 +48,6 @@ function preparedFetch(opts, sessionToken) {
 
 const Wrapper = styled.div`
   display: flex;
-
-  input {
-    height: 20px;
-    border-bottom: 1px solid black;
-  }
 `;
 
 /* eslint-disable react/prefer-stateless-function */
