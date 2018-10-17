@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 
 const Name = styled.div`
   margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   span {
-    text-overflow: ellipsis;
-    overflow: hidden;
     color: #666;
     cursor: pointer;
   }

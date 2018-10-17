@@ -6,7 +6,8 @@ import ContactName from '../ContactName';
 const SidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 10%;
+  min-width: 200px;
 
   h3 {
     margin: 10px 10px 0 10px;
@@ -40,7 +41,10 @@ export default class ContactsSidebar extends React.PureComponent {
       <SidebarWrapper>
         <header>
           <h3>Your contacts:</h3>
-          <input onChange={e => setSearchedContact(e.target.value)} placeholder='Search...'/>
+          <input
+            onChange={e => setSearchedContact(e.target.value)}
+            placeholder="Search..."
+          />
         </header>
         <ContactList>
           {contacts.map(contact => (
