@@ -58,6 +58,7 @@ export default class HomePage extends React.PureComponent {
       contacts: [],
       activeContact: null,
       serchedName: '',
+      isAlphabeticalOrder: false,
     };
   }
 
@@ -91,16 +92,42 @@ export default class HomePage extends React.PureComponent {
     });
   };
 
+  setAlphabeticalOrder = () => {
+    this.setState({
+      isAlphabeticalOrder: !this.state.isAlphabeticalOrder,
+    });
+  };
+
   render() {
-    const { contacts, activeContact, serchedName } = this.state;
+    const {
+      contacts,
+      activeContact,
+      serchedName,
+      isAlphabeticalOrder,
+    } = this.state;
     return (
       <Wrapper>
+        <button onClick={() => this.setAlphabeticalOrder()}>click</button>
         <ContactsSidebar
-          contacts={contacts.filter(
-            contact =>
-              contact.name.toLowerCase().indexOf(serchedName.toLowerCase()) !==
-              -1,
-          )}
+          contacts={contacts
+            .sort((a, b) => {
+              if (!isAlphabeticalOrder) {
+                return;
+              }
+
+              if (a.name > b.name) {
+                return 1;
+              }
+              if (a.name < b.name) {
+                return -1;
+              }
+            })
+            .filter(
+              contact =>
+                contact.name
+                  .toLowerCase()
+                  .indexOf(serchedName.toLowerCase()) !== -1,
+            )}
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
         />

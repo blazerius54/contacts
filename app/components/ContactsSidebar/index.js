@@ -35,6 +35,10 @@ const ContactList = styled.div`
 
 /* eslint-disable react/prefer-stateless-function */
 export default class ContactsSidebar extends React.PureComponent {
+  componentWillReceiveProps(newProps) {
+    console.log(newProps.contacts);
+  }
+
   render() {
     const { contacts, setActiveContact, setSearchedContact } = this.props;
     return (
