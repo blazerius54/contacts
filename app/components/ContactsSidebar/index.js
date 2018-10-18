@@ -77,11 +77,12 @@ export default class ContactsSidebar extends React.PureComponent {
               return -1;
             }
           })
-            .map(contact => (
+            .map((contact, index) => (
               <ContactName
                 contact={contact}
                 setActiveContact={setActiveContact}
                 key={contact.email}
+                index={index}
               />
             ))}
         </ContactList>

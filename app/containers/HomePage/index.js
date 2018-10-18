@@ -56,6 +56,7 @@ export default class HomePage extends React.PureComponent {
     this.state = {
       contacts: [],
       activeContact: null,
+      index: null,
       serchedName: '',
       isAlphabeticalOrder: false,
     };
@@ -64,7 +65,7 @@ export default class HomePage extends React.PureComponent {
   componentDidMount() {
     let contacts = localStorage.getItem('contacts');
     contacts = JSON.parse(contacts);
-    if(contacts !== null && contacts.length > 0) {
+    if (contacts !== null && contacts.length > 0) {
       this.parseContacts();
     } else {
       this.userRequest();
@@ -77,10 +78,9 @@ export default class HomePage extends React.PureComponent {
     this.setState({
       contacts,
     });
-  }; 
+  };
 
-  userRequest = () => {
-    return preparedFetch({
+  userRequest = () => preparedFetch({
       method: 'GET',
     })
       .then(response => {
@@ -94,11 +94,11 @@ export default class HomePage extends React.PureComponent {
           this.setState({ contacts: data });
         }),
       );
-  };
 
-  setActiveContact = activeContact => {
+  setActiveContact = (activeContact, index) => {
     this.setState({
       activeContact,
+      index,
     });
   };
 
@@ -111,6 +111,23 @@ export default class HomePage extends React.PureComponent {
   setAlphabeticalOrder = () => {
     this.setState({
       isAlphabeticalOrder: !this.state.isAlphabeticalOrder,
+    });
+  };
+
+  editContact = name => {
+    let test = this.state.contacts;
+    let newContact = this.state.contacts[this.state.index];
+    newContact = {
+      ...newContact,
+      name,
+    };
+    test = [
+      ...test.slice(0, this.state.index),
+      newContact,
+      ...test.slice(this.state.index + 1),
+    ];
+    this.setState({
+      contacts: test,
     });
   };
 
@@ -134,7 +151,7 @@ export default class HomePage extends React.PureComponent {
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
         />
-        {activeContact && <ActiveContact activeContact={activeContact} />}
+        {activeContact && <ActiveContact activeContact={activeContact} editContact={this.editContact} />}
       </Wrapper>
     );
   }

@@ -15,9 +15,9 @@ const Name = styled.div`
 
 /* eslint-disable react/prefer-stateless-function */
 const ContactName = props => {
-  const { contact, setActiveContact } = props;
+  const { contact, setActiveContact, index } = props;
   return (
-    <Name onClick={() => setActiveContact(contact)}>
+    <Name onClick={() => setActiveContact(contact, index)}>
       <span>{contact.name}</span>
     </Name>
   );
@@ -28,4 +28,5 @@ export default ContactName;
 ContactName.propTypes = {
   setActiveContact: PropTypes.func.isRequired,
   contact: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
 };
