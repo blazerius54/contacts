@@ -19,7 +19,7 @@ const SidebarWrapper = styled.div`
     line-height: 30px;
     font-size: 110%;
     width: 80%;
-    
+
     &:focus {
       outline: none;
     }
@@ -29,7 +29,6 @@ const SidebarWrapper = styled.div`
 const ContactList = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: 30%; */
   min-height: 100vh;
   border-right: 2px solid black;
   border-top: 2px solid black;
@@ -37,14 +36,14 @@ const ContactList = styled.div`
 
 const HeaderRow = styled.div`
   display: flex;
+
+  img {
+    opacity: ${props => props.isButtonPressed && 0.2};
+  }
 `;
 
 /* eslint-disable react/prefer-stateless-function */
 export default class ContactsSidebar extends React.PureComponent {
-  componentWillReceiveProps(newProps) {
-    console.log(newProps.contacts);
-  }
-
   render() {
     const {
       contacts,
@@ -57,7 +56,7 @@ export default class ContactsSidebar extends React.PureComponent {
       <SidebarWrapper>
         <header>
           <h3>Your contacts:</h3>
-          <HeaderRow>
+          <HeaderRow isButtonPressed={isAlphabeticalOrder}>
             <input
               onChange={e => setSearchedContact(e.target.value)}
               placeholder="Search..."
@@ -70,17 +69,17 @@ export default class ContactsSidebar extends React.PureComponent {
         <ContactList>
           {contacts
             .sort((a, b) => {
-            if (!isAlphabeticalOrder) {
-              return;
-            }
+                if (!isAlphabeticalOrder) {
+                  return;
+              }
 
-            if (a.name > b.name) {
-              return 1;
-            }
-            if (a.name < b.name) {
-              return -1;
-            }
-          })
+                if (a.name > b.name) {
+                  return 1;
+                }
+                if (a.name < b.name) {
+                  return -1;
+                }
+              })
             .map(contact => (
               <ContactName
                 contact={contact}
