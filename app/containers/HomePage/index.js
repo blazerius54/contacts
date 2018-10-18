@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
@@ -107,27 +106,14 @@ export default class HomePage extends React.PureComponent {
     } = this.state;
     return (
       <Wrapper>
-        <button onClick={() => this.setAlphabeticalOrder()}>click</button>
         <ContactsSidebar
-          contacts={contacts
-            .sort((a, b) => {
-              if (!isAlphabeticalOrder) {
-                return;
-              }
-
-              if (a.name > b.name) {
-                return 1;
-              }
-              if (a.name < b.name) {
-                return -1;
-              }
-            })
-            .filter(
-              contact =>
-                contact.name
-                  .toLowerCase()
-                  .indexOf(serchedName.toLowerCase()) !== -1,
-            )}
+          isAlphabeticalOrder={isAlphabeticalOrder}
+          setAlphabeticalOrder={this.setAlphabeticalOrder}
+          contacts={contacts.filter(
+            contact =>
+              contact.name.toLowerCase().indexOf(serchedName.toLowerCase()) !==
+              -1,
+          )}
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
         />
