@@ -1,31 +1,103 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import ContactName from '../ContactName';
+import azPicture from '../../images/az.png';
+
+const SidebarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 10%;
+  min-width: 200px;
+
+  h3 {
+    margin: 10px 10px 0 10px;
+  }
+
+  input {
+    padding-left: 10px;
+    line-height: 30px;
+    font-size: 110%;
+    width: 80%;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+`;
 
 const ContactList = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
+  /* width: 30%; */
+  min-height: 100vh;
   border-right: 2px solid black;
+  border-top: 2px solid black;
+`;
+
+const HeaderRow = styled.div`
+  display: flex;
 `;
 
 /* eslint-disable react/prefer-stateless-function */
 export default class ContactsSidebar extends React.PureComponent {
+  componentWillReceiveProps(newProps) {
+    console.log(newProps.contacts);
+  }
+
   render() {
-    const { contacts, setActiveContact } = this.props;
+    const {
+      contacts,
+      setActiveContact,
+      setSearchedContact,
+      isAlphabeticalOrder,
+      setAlphabeticalOrder,
+    } = this.props;
     return (
-      <ContactList>
-        {contacts.map(contact => (
-          <div onClick={() => setActiveContact(contact)} key={contact.email}>
-            {contact.name}
-          </div>
-        ))}
-      </ContactList>
+      <SidebarWrapper>
+        <header>
+          <h3>Your contacts:</h3>
+          <HeaderRow>
+            <input
+              onChange={e => setSearchedContact(e.target.value)}
+              placeholder="Search..."
+            />
+            <button onClick={() => setAlphabeticalOrder()}>
+              <img src={azPicture} alt="a-z" />
+            </button>
+          </HeaderRow>
+        </header>
+        <ContactList>
+          {contacts
+            .sort((a, b) => {
+            if (!isAlphabeticalOrder) {
+              return;
+            }
+
+            if (a.name > b.name) {
+              return 1;
+            }
+            if (a.name < b.name) {
+              return -1;
+            }
+          })
+            .map(contact => (
+              <ContactName
+                contact={contact}
+                setActiveContact={setActiveContact}
+                key={contact.email}
+              />
+            ))}
+        </ContactList>
+      </SidebarWrapper>
     );
   }
 }
 
 ContactsSidebar.propTypes = {
-  contacts: PropTypes.array,
   setActiveContact: PropTypes.func.isRequired,
+  setSearchedContact: PropTypes.func.isRequired,
+  setAlphabeticalOrder: PropTypes.func.isRequired,
+  isAlphabeticalOrder: PropTypes.bool.isRequired,
+  contacts: PropTypes.array,
 };

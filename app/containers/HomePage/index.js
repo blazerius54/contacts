@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
@@ -48,11 +47,6 @@ function preparedFetch(opts, sessionToken) {
 
 const Wrapper = styled.div`
   display: flex;
-
-  input {
-    height: 20px;
-    border-bottom: 1px solid black;
-  }
 `;
 
 /* eslint-disable react/prefer-stateless-function */
@@ -61,8 +55,9 @@ export default class HomePage extends React.PureComponent {
     super(props);
     this.state = {
       contacts: [],
-      activeContact: {},
+      activeContact: null,
       serchedName: '',
+      isAlphabeticalOrder: false,
     };
   }
 
@@ -90,30 +85,39 @@ export default class HomePage extends React.PureComponent {
     });
   };
 
+  setSearchedContact = serchedName => {
+    this.setState({
+      serchedName,
+    });
+  };
+
+  setAlphabeticalOrder = () => {
+    this.setState({
+      isAlphabeticalOrder: !this.state.isAlphabeticalOrder,
+    });
+  };
+
   render() {
-    const { contacts, activeContact } = this.state;
+    const {
+      contacts,
+      activeContact,
+      serchedName,
+      isAlphabeticalOrder,
+    } = this.state;
     return (
       <Wrapper>
-        <input
-          onChange={e =>
-            this.setState({
-              serchedName: e.target.value,
-            })
-          }
-        />
         <ContactsSidebar
-          contacts={contacts.filter(contact => {
-            if (
-              contact.name
-                .toLowerCase()
-                .indexOf(this.state.serchedName.toLowerCase()) !== -1
-            ) {
-              return contact;
-            }
-          })}
+          isAlphabeticalOrder={isAlphabeticalOrder}
+          setAlphabeticalOrder={this.setAlphabeticalOrder}
+          contacts={contacts.filter(
+            contact =>
+              contact.name.toLowerCase().indexOf(serchedName.toLowerCase()) !==
+              -1,
+          )}
           setActiveContact={this.setActiveContact}
+          setSearchedContact={this.setSearchedContact}
         />
-        <ActiveContact activeContact={activeContact} />
+        {activeContact && <ActiveContact activeContact={activeContact} />}
       </Wrapper>
     );
   }
