@@ -62,10 +62,24 @@ export default class HomePage extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.userRequest();
+    let contacts = localStorage.getItem('contacts');
+    contacts = JSON.parse(contacts);
+    if(contacts !== null && contacts.length > 0) {
+      this.parseContacts();
+    } else {
+      this.userRequest();
+    }
   }
 
-  userRequest() {
+  parseContacts = () => {
+    let contacts = localStorage.getItem('contacts');
+    contacts = JSON.parse(contacts);
+    this.setState({
+      contacts,
+    });
+  }; 
+
+  userRequest = () => {
     return preparedFetch({
       method: 'GET',
     })
@@ -75,9 +89,12 @@ export default class HomePage extends React.PureComponent {
         }
       })
       .then(data =>
-        data.json().then(data => this.setState({ contacts: data })),
+        data.json().then(data => {
+          localStorage.setItem('contacts', JSON.stringify(data));
+          this.setState({ contacts: data });
+        }),
       );
-  }
+  };
 
   setActiveContact = activeContact => {
     this.setState({
