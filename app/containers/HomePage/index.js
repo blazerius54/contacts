@@ -1,15 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
 import preparedFetch from '../../network/request';
+import { makeSelectLoading } from './slectors';
+import reducer from './reducer';
+import injectReducer from '../../utils/injectReducer';
 
 const Wrapper = styled.div`
   display: flex;
 `;
 
 /* eslint-disable react/prefer-stateless-function */
-export default class HomePage extends React.PureComponent {
+class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,6 +35,7 @@ export default class HomePage extends React.PureComponent {
     } else {
       this.userRequest();
     }
+    console.log(this.props)
   }
 
   parseContacts = () => {
@@ -127,3 +134,21 @@ export default class HomePage extends React.PureComponent {
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  isLoading: makeSelectLoading(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  null,
+);
+
+const withReducer = injectReducer({ key: 'HomePage', reducer });
+// const withSaga = injectSaga({ key: 'Calendar', saga });
+
+export default compose(
+  withReducer,
+  // withSaga,
+  withConnect,
+)(HomePage);
