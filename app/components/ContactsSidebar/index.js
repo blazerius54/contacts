@@ -61,9 +61,9 @@ export default class ContactsSidebar extends React.PureComponent {
               onChange={e => setSearchedContact(e.target.value)}
               placeholder="Search..."
             />
-            <button onClick={() => setAlphabeticalOrder()}>
+            {/* <button onClick={() => setAlphabeticalOrder()}>
               <img src={azPicture} alt="a-z" />
-            </button>
+            </button> */}
           </HeaderRow>
         </header>
         <ContactList>
