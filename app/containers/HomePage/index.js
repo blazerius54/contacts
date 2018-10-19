@@ -2,48 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
-
-function preparedFetch(opts, sessionToken) {
-  const reqOpts = {
-    method: opts.method,
-    headers: {},
-  };
-
-  if (sessionToken) {
-    reqOpts.headers.Authorization = `Bearer ${sessionToken}`;
-  }
-
-  if (
-    opts.method === 'POST' ||
-    opts.method === 'PUT' ||
-    opts.method === 'PATCH' ||
-    opts.method === 'DELETE'
-  ) {
-    reqOpts.headers.Accept = 'application/json';
-    reqOpts.headers['Content-Type'] = 'application/json';
-  }
-
-  if (opts.body) {
-    reqOpts.body = opts.body;
-
-    if (
-      opts.method === 'POST' ||
-      opts.method === 'PUT' ||
-      opts.method === 'PATCH' ||
-      opts.method === 'DELETE'
-    ) {
-      reqOpts.body = JSON.stringify(opts.body);
-    }
-  }
-
-  const url = `http://demo.sibers.com/users`;
-  return fetch(url, reqOpts).then(response => {
-    if (response.status === 401) {
-      return;
-    }
-    return response;
-  });
-}
+import preparedFetch from '../../network/request';
 
 const Wrapper = styled.div`
   display: flex;
@@ -116,7 +75,7 @@ export default class HomePage extends React.PureComponent {
   };
 
   editContact = (name, email, phone, website) => {
-    let test = this.state.contacts;
+    let newContacts = this.state.contacts;
     let newContact = this.state.contacts[this.state.index];
     newContact = {
       ...newContact,
@@ -125,15 +84,16 @@ export default class HomePage extends React.PureComponent {
       phone,
       website,
     };
-    test = [
-      ...test.slice(0, this.state.index),
+    newContacts = [
+      ...newContacts.slice(0, this.state.index),
       newContact,
-      ...test.slice(this.state.index + 1),
+      ...newContacts.slice(this.state.index + 1),
     ];
     this.setState({
       activeContact: newContact,
-      contacts: test,
+      contacts: newContacts,
     });
+    localStorage.setItem('contacts', JSON.stringify(newContacts));
   };
 
   render() {
