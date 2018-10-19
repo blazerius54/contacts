@@ -68,23 +68,24 @@ export default class ContactsSidebar extends React.PureComponent {
         </header>
         <ContactList>
           {contacts
-            .sort((a, b) => {
-                if (!isAlphabeticalOrder) {
-                  return;
-              }
+          //   .sort((a, b) => {
+          //   if (!isAlphabeticalOrder) {
+          //     return;
+          //   }
 
-                if (a.name > b.name) {
-                  return 1;
-                }
-                if (a.name < b.name) {
-                  return -1;
-                }
-              })
-            .map(contact => (
+          //   if (a.name > b.name) {
+          //     return 1;
+          //   }
+          //   if (a.name < b.name) {
+          //     return -1;
+          //   }
+          // })
+            .map((contact, index) => (
               <ContactName
                 contact={contact}
                 setActiveContact={setActiveContact}
                 key={contact.email}
+                index={index}
               />
             ))}
         </ContactList>
