@@ -1,15 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
-import preparedFetch from '../../network/request';
+import { makeSelectLoading, makeSelectContacts } from './slectors';
+import reducer from './reducer';
+import injectReducer from '../../utils/injectReducer';
+import injectSaga from '../../utils/injectSaga';
+import { requestContacts } from './actions';
+import saga from './saga';
 
 const Wrapper = styled.div`
   display: flex;
 `;
 
 /* eslint-disable react/prefer-stateless-function */
-export default class HomePage extends React.PureComponent {
+class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +27,7 @@ export default class HomePage extends React.PureComponent {
       serchedName: '',
       isAlphabeticalOrder: false,
     };
+    // this.state.contacts = this.props.contacts.length === 0 ? [] : this.props.contacts;
   }
 
   componentDidMount() {
@@ -27,9 +36,21 @@ export default class HomePage extends React.PureComponent {
     if (contacts !== null && contacts.length > 0) {
       this.parseContacts();
     } else {
-      this.userRequest();
+      this.props.requestContacts();
     }
   }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.contacts && newProps.contacts.length > 0) {
+      this.setContacts(newProps.contacts);
+    }
+  }
+
+  setContacts = contacts => {
+    this.setState({
+      contacts,
+    });
+  };
 
   parseContacts = () => {
     let contacts = localStorage.getItem('contacts');
@@ -38,22 +59,6 @@ export default class HomePage extends React.PureComponent {
       contacts,
     });
   };
-
-  userRequest = () =>
-    preparedFetch({
-      method: 'GET',
-    })
-      .then(response => {
-        if (response.status === 200) {
-          return response;
-        }
-      })
-      .then(data =>
-        data.json().then(data => {
-          localStorage.setItem('contacts', JSON.stringify(data));
-          this.setState({ contacts: data });
-        }),
-      );
 
   setActiveContact = (activeContact, index) => {
     this.setState({
@@ -127,3 +132,22 @@ export default class HomePage extends React.PureComponent {
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  isLoading: makeSelectLoading(),
+  contacts: makeSelectContacts(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  { requestContacts },
+);
+
+const withReducer = injectReducer({ key: 'HomePage', reducer });
+const withSaga = injectSaga({ key: 'HomePage', saga });
+
+export default compose(
+  withReducer,
+  withSaga,
+  withConnect,
+)(HomePage);
