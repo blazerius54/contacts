@@ -4,6 +4,7 @@ export const requestContacts = () => ({
   type: CONTATACT_REQUEST,
 });
 
-export const requestContactsSuccess = () => ({
+export const requestContactsSuccess = contacts => ({
   type: CONTATACT_REQUEST_SUCCESS,
+  contacts,
 });

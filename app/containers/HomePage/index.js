@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ContactsSidebar from '../../components/ContactsSidebar';
 import ActiveContact from '../ActiveContact';
-import preparedFetch from '../../network/request';
-import { makeSelectLoading } from './slectors';
+import { makeSelectLoading, makeSelectContacts } from './slectors';
 import reducer from './reducer';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
@@ -28,6 +27,7 @@ class HomePage extends React.PureComponent {
       serchedName: '',
       isAlphabeticalOrder: false,
     };
+    // this.state.contacts = this.props.contacts.length === 0 ? [] : this.props.contacts;
   }
 
   componentDidMount() {
@@ -36,10 +36,21 @@ class HomePage extends React.PureComponent {
     if (contacts !== null && contacts.length > 0) {
       this.parseContacts();
     } else {
-      this.userRequest();
+      this.props.requestContacts();
     }
-    console.log(this.props)
   }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.contacts && newProps.contacts.length > 0) {
+      this.setContacts(newProps.contacts);
+    }
+  }
+
+  setContacts = contacts => {
+    this.setState({
+      contacts,
+    });
+  };
 
   parseContacts = () => {
     let contacts = localStorage.getItem('contacts');
@@ -48,22 +59,6 @@ class HomePage extends React.PureComponent {
       contacts,
     });
   };
-
-  userRequest = () =>
-    preparedFetch({
-      method: 'GET',
-    })
-      .then(response => {
-        if (response.status === 200) {
-          return response;
-        }
-      })
-      .then(data =>
-        data.json().then(data => {
-          localStorage.setItem('contacts', JSON.stringify(data));
-          this.setState({ contacts: data });
-        }),
-      );
 
   setActiveContact = (activeContact, index) => {
     this.setState({
@@ -115,7 +110,6 @@ class HomePage extends React.PureComponent {
     } = this.state;
     return (
       <Wrapper>
-        <button onClick={() => this.props.requestContacts()}>click</button>
         <ContactsSidebar
           isAlphabeticalOrder={isAlphabeticalOrder}
           setAlphabeticalOrder={this.setAlphabeticalOrder}
@@ -141,6 +135,7 @@ class HomePage extends React.PureComponent {
 
 const mapStateToProps = createStructuredSelector({
   isLoading: makeSelectLoading(),
+  contacts: makeSelectContacts(),
 });
 
 const withConnect = connect(

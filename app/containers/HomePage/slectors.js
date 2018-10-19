@@ -4,6 +4,9 @@ import { initialState } from './reducer';
 const selectHome = state => state.get('HomePage', initialState);
 
 const makeSelectLoading = () =>
-  createSelector(selectHome, homeState => homeState['isLoading']);
+  createSelector(selectHome, homeState => homeState.isLoading);
 
-export { selectHome, makeSelectLoading };
+const makeSelectContacts = () =>
+  createSelector(selectHome, homeState => homeState.contacts);
+
+export { selectHome, makeSelectLoading, makeSelectContacts };

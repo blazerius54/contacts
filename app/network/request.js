@@ -1,7 +1,6 @@
 function preparedFetch(opts) {
   const reqOpts = {
     method: opts.method,
-    headers: {},
   };
 
   const url = `http://demo.sibers.com/users`;
@@ -14,17 +13,11 @@ function preparedFetch(opts) {
 }
 
 export default function contactRequest() {
-  preparedFetch({
+  return preparedFetch({
     method: 'GET',
-  })
-    .then(response => {
-      if (response.status === 200) {
-        return response;
-      }
-    })
-    .then(data =>
-      data.json().then(data => {
-        console.log(data);
-      }),
-    );
-};
+  }).then(response => {
+    if (response.status === 200) {
+      return response;
+    }
+  });
+}
