@@ -9,6 +9,9 @@ import preparedFetch from '../../network/request';
 import { makeSelectLoading } from './slectors';
 import reducer from './reducer';
 import injectReducer from '../../utils/injectReducer';
+import injectSaga from '../../utils/injectSaga';
+import { requestContacts } from './actions';
+import saga from './saga';
 
 const Wrapper = styled.div`
   display: flex;
@@ -112,6 +115,7 @@ class HomePage extends React.PureComponent {
     } = this.state;
     return (
       <Wrapper>
+        <button onClick={() => this.props.requestContacts()}>click</button>
         <ContactsSidebar
           isAlphabeticalOrder={isAlphabeticalOrder}
           setAlphabeticalOrder={this.setAlphabeticalOrder}
@@ -141,14 +145,14 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(
   mapStateToProps,
-  null,
+  { requestContacts },
 );
 
 const withReducer = injectReducer({ key: 'HomePage', reducer });
-// const withSaga = injectSaga({ key: 'Calendar', saga });
+const withSaga = injectSaga({ key: 'HomePage', saga });
 
 export default compose(
   withReducer,
-  // withSaga,
+  withSaga,
   withConnect,
 )(HomePage);

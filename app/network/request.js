@@ -1,4 +1,4 @@
-export default function preparedFetch(opts) {
+function preparedFetch(opts) {
   const reqOpts = {
     method: opts.method,
     headers: {},
@@ -12,3 +12,19 @@ export default function preparedFetch(opts) {
     return response;
   });
 }
+
+export default function contactRequest() {
+  preparedFetch({
+    method: 'GET',
+  })
+    .then(response => {
+      if (response.status === 200) {
+        return response;
+      }
+    })
+    .then(data =>
+      data.json().then(data => {
+        console.log(data);
+      }),
+    );
+};
