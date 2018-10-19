@@ -80,7 +80,8 @@ export default class HomePage extends React.PureComponent {
     });
   };
 
-  userRequest = () => preparedFetch({
+  userRequest = () =>
+    preparedFetch({
       method: 'GET',
     })
       .then(response => {
@@ -114,12 +115,15 @@ export default class HomePage extends React.PureComponent {
     });
   };
 
-  editContact = name => {
+  editContact = (name, email, phone, website) => {
     let test = this.state.contacts;
     let newContact = this.state.contacts[this.state.index];
     newContact = {
       ...newContact,
       name,
+      email,
+      phone,
+      website,
     };
     test = [
       ...test.slice(0, this.state.index),
@@ -127,6 +131,7 @@ export default class HomePage extends React.PureComponent {
       ...test.slice(this.state.index + 1),
     ];
     this.setState({
+      activeContact: newContact,
       contacts: test,
     });
   };
@@ -151,7 +156,13 @@ export default class HomePage extends React.PureComponent {
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
         />
-        {activeContact && <ActiveContact activeContact={activeContact} editContact={this.editContact} />}
+        {activeContact && (
+          <ActiveContact
+            activeContact={activeContact}
+            editContact={this.editContact}
+            contacts={contacts}
+          />
+        )}
       </Wrapper>
     );
   }
