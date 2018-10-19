@@ -13,9 +13,21 @@ const ActiveContactSection = styled.div`
 const ActiveContactWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%;
+  width: 40%;
+  box-shadow: 0px 5px 16px 3px rgba(0,0,0,0.75);
+  padding: 10px;
+
   img {
     align-self: center;
+    border-radius: 100%;
+    border: 2px solid silver;
+  }
+
+  button {
+    background: #555;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
   }
 `;
 
@@ -23,6 +35,11 @@ const ContactRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+    
+    input {
+      flex-shrink:1;
+      text-align: right;
+    }
 `;
 
 /* eslint-disable react/prefer-stateless-function */
