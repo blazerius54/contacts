@@ -33,6 +33,7 @@ class HomePage extends React.PureComponent {
       index: null,
       serchedName: '',
       isAlphabeticalOrder: false,
+      isContactEditing: false,
     };
     // this.state.contacts = this.props.contacts.length === 0 ? [] : this.props.contacts;
   }
@@ -68,6 +69,9 @@ class HomePage extends React.PureComponent {
   };
 
   setActiveContact = (activeContact, index) => {
+    if(this.state.isContactEditing) {
+      return
+    };
     this.setState({
       activeContact,
       index,
@@ -109,12 +113,19 @@ class HomePage extends React.PureComponent {
     localStorage.setItem('contacts', JSON.stringify(newContacts));
   };
 
+  setContactEditing = () => {
+    this.setState({
+      isContactEditing: !this.state.isContactEditing,
+    });
+  };
+
   render() {
     const {
       contacts,
       activeContact,
       serchedName,
       isAlphabeticalOrder,
+      isContactEditing,
     } = this.state;
     const { isLoading } = this.props;
 
@@ -136,7 +147,9 @@ class HomePage extends React.PureComponent {
           <ActiveContact
             activeContact={activeContact}
             editContact={this.editContact}
+            setContactEditing={this.setContactEditing}
             contacts={contacts}
+            isContactEditing={isContactEditing}
           />
         )}
         {isLoading && <Center>loading...</Center>}

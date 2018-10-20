@@ -55,7 +55,6 @@ export default class ActiveContact extends React.PureComponent {
     const { name, email, phone, website } = props.activeContact;
     super(props);
     this.state = {
-      isEditing: false,
       name,
       email,
       phone,
@@ -71,14 +70,13 @@ export default class ActiveContact extends React.PureComponent {
 
   render() {
     const { avatar, name, email, phone, website } = this.props.activeContact;
-    const { isEditing } = this.state;
-    const { editContact } = this.props;
+    const { editContact, isContactEditing, setContactEditing } = this.props;
     return (
       <ActiveContactSection>
         <ActiveContactWrapper>
           <ContactRow>
             <img src={avatar} alt="avatar" />
-            {isEditing ? (
+            {isContactEditing ? (
               <input
                 defaultValue={name}
                 onChange={e => this.changeState('name', e.target.value)}
@@ -87,7 +85,7 @@ export default class ActiveContact extends React.PureComponent {
               <p>{name}</p>
             )}
           </ContactRow>
-          {isEditing ? (
+          {isContactEditing ? (
             <div>
               <ContactRow>
                 <p>Email:</p>
@@ -118,9 +116,7 @@ export default class ActiveContact extends React.PureComponent {
                     this.state.phone,
                     this.state.website,
                   );
-                  this.setState({
-                    isEditing: !isEditing,
-                  });
+                  setContactEditing();
                 }}
               >
                 save
@@ -145,12 +141,12 @@ export default class ActiveContact extends React.PureComponent {
               <button
                 onClick={() => {
                   this.setState({
-                    isEditing: !isEditing,
                     name,
                     email,
                     phone,
                     website,
                   });
+                  setContactEditing();
                 }}
               >
                 edit
