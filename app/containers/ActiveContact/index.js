@@ -39,8 +39,13 @@ const ContactRow = styled.div`
   justify-content: space-between;
 
   input {
-    flex-shrink: 1;
+    flex-grow: 1;
     text-align: right;
+    color: #666;
+
+    &:focus {
+      outline: none;
+    }
   }
 `;
 

@@ -72,6 +72,7 @@ class HomePage extends React.PureComponent {
       activeContact,
       index,
     });
+    window.scrollTo(0, 0);
   };
 
   setSearchedContact = serchedName => {
