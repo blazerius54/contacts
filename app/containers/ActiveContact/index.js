@@ -14,13 +14,15 @@ const ActiveContactWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 40%;
-  box-shadow: 0px 5px 16px 3px rgba(0,0,0,0.75);
+  box-shadow: 0px 5px 16px 3px rgba(0, 0, 0, 0.75);
   padding: 10px;
 
   img {
     align-self: center;
     border-radius: 100%;
     border: 2px solid silver;
+    width: 130px;
+    height: 130px;
   }
 
   button {
@@ -35,11 +37,11 @@ const ContactRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-    
-    input {
-      flex-shrink:1;
-      text-align: right;
-    }
+
+  input {
+    flex-shrink: 1;
+    text-align: right;
+  }
 `;
 
 /* eslint-disable react/prefer-stateless-function */

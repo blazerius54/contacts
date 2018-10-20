@@ -16,6 +16,13 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
+const Center = styled.div`
+  margin: 300px auto;
+  font-weight: 600;
+  font-size: 120%;
+  color: #888;
+`;
+
 /* eslint-disable react/prefer-stateless-function */
 class HomePage extends React.PureComponent {
   constructor(props) {
@@ -41,7 +48,7 @@ class HomePage extends React.PureComponent {
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.contacts && newProps.contacts.length > 0) {
+    if (newProps.contacts && newProps.contacts.length > 0) {
       this.setContacts(newProps.contacts);
     }
   }
@@ -108,6 +115,8 @@ class HomePage extends React.PureComponent {
       serchedName,
       isAlphabeticalOrder,
     } = this.state;
+    const { isLoading } = this.props;
+
     return (
       <Wrapper>
         <ContactsSidebar
@@ -120,6 +129,7 @@ class HomePage extends React.PureComponent {
           )}
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
+          isLoading={this.props.isLoading}
         />
         {activeContact && (
           <ActiveContact
@@ -128,6 +138,8 @@ class HomePage extends React.PureComponent {
             contacts={contacts}
           />
         )}
+        {isLoading && <Center>loading...</Center>}
+        {!isLoading && !activeContact && <Center>choose contact</Center>}
       </Wrapper>
     );
   }
