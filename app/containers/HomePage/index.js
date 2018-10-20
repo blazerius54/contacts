@@ -16,6 +16,13 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
+const Center = styled.div`
+  margin: 300px auto;
+  font-weight: 600;
+  font-size: 120%;
+  color: #888;
+`;
+
 /* eslint-disable react/prefer-stateless-function */
 class HomePage extends React.PureComponent {
   constructor(props) {
@@ -26,6 +33,7 @@ class HomePage extends React.PureComponent {
       index: null,
       serchedName: '',
       isAlphabeticalOrder: false,
+      isContactEditing: false,
     };
     // this.state.contacts = this.props.contacts.length === 0 ? [] : this.props.contacts;
   }
@@ -41,7 +49,7 @@ class HomePage extends React.PureComponent {
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.contacts && newProps.contacts.length > 0) {
+    if (newProps.contacts && newProps.contacts.length > 0) {
       this.setContacts(newProps.contacts);
     }
   }
@@ -61,10 +69,14 @@ class HomePage extends React.PureComponent {
   };
 
   setActiveContact = (activeContact, index) => {
+    if(this.state.isContactEditing) {
+      return
+    };
     this.setState({
       activeContact,
       index,
     });
+    window.scrollTo(0, 0);
   };
 
   setSearchedContact = serchedName => {
@@ -101,13 +113,22 @@ class HomePage extends React.PureComponent {
     localStorage.setItem('contacts', JSON.stringify(newContacts));
   };
 
+  setContactEditing = () => {
+    this.setState({
+      isContactEditing: !this.state.isContactEditing,
+    });
+  };
+
   render() {
     const {
       contacts,
       activeContact,
       serchedName,
       isAlphabeticalOrder,
+      isContactEditing,
     } = this.state;
+    const { isLoading } = this.props;
+
     return (
       <Wrapper>
         <ContactsSidebar
@@ -120,14 +141,19 @@ class HomePage extends React.PureComponent {
           )}
           setActiveContact={this.setActiveContact}
           setSearchedContact={this.setSearchedContact}
+          isLoading={this.props.isLoading}
         />
         {activeContact && (
           <ActiveContact
             activeContact={activeContact}
             editContact={this.editContact}
+            setContactEditing={this.setContactEditing}
             contacts={contacts}
+            isContactEditing={isContactEditing}
           />
         )}
+        {isLoading && <Center>loading...</Center>}
+        {!isLoading && !activeContact && <Center>choose contact</Center>}
       </Wrapper>
     );
   }
